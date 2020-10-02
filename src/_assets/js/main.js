@@ -35,8 +35,8 @@ $(function () {
 function adjustToc() {
   // Adjustments to the jekyll-toc TOC.
 
-  var tocId = '#site-toc--side';
-  var tocWrapper = $(tocId);
+  const tocId = '#site-toc--side';
+  const tocWrapper = $(tocId);
   $(tocWrapper).find('.site-toc--button__page-top').click(function () {
     $('html, body').animate({ scrollTop: 0 }, 'fast');
   })
@@ -45,11 +45,11 @@ function adjustToc() {
 }
 
 function initFixedColumns() {
-  var fixedColumnsSelector = '[data-fixed-column]';
-  var bannerSelector = '.site-banner';
-  var footerSelector = 'footer.site-footer';
-  var headerSelector = '.site-header';
-  var fixedColumns = $(fixedColumnsSelector);
+  const fixedColumnsSelector = '[data-fixed-column]';
+  const bannerSelector = '.site-banner';
+  const footerSelector = 'footer.site-footer';
+  const headerSelector = '.site-header';
+  const fixedColumns = $(fixedColumnsSelector);
 
   function adjustFixedColumns() {
     // only change values if the fixed col is visible
@@ -57,18 +57,18 @@ function initFixedColumns() {
       return;
     }
 
-    var headerHeight = $(headerSelector).outerHeight();
-    var bannerHeight = $(bannerSelector).outerHeight();
-    var bannerOffset = $(bannerSelector).offset().top;
-    var bannerPosition = bannerOffset - $(window).scrollTop();
-    var bannerVisibleHeight = Math.max(bannerHeight - (headerHeight - bannerPosition), 0);
-    var topOffset = headerHeight + bannerVisibleHeight;
+    const headerHeight = $(headerSelector).outerHeight();
+    const bannerHeight = $(bannerSelector).outerHeight();
+    const bannerOffset = $(bannerSelector).offset().top;
+    const bannerPosition = bannerOffset - $(window).scrollTop();
+    const bannerVisibleHeight = Math.max(bannerHeight - (headerHeight - bannerPosition), 0);
+    const topOffset = headerHeight + bannerVisibleHeight;
 
-    var footerOffset = $(footerSelector).offset().top;
-    var footerPosition = footerOffset - $(window).scrollTop();
-    var footerVisibleHeight = $(window).height() - footerPosition;
+    const footerOffset = $(footerSelector).offset().top;
+    const footerPosition = footerOffset - $(window).scrollTop();
+    const footerVisibleHeight = $(window).height() - footerPosition;
 
-    var fixedColumnsMaxHeight = $(window).height() - topOffset - footerVisibleHeight;
+    const fixedColumnsMaxHeight = $(window).height() - topOffset - footerVisibleHeight;
 
     $(fixedColumnsSelector).css('max-height', fixedColumnsMaxHeight);
     $(fixedColumnsSelector).css('top', topOffset);
@@ -84,7 +84,7 @@ function initFixedColumns() {
 }
 
 function getOS() {
-  var ua = navigator.userAgent;
+  const ua = navigator.userAgent;
   if (ua.indexOf("Win") !== -1)
     return "windows";
   if (ua.indexOf("Mac") !== -1)
@@ -94,13 +94,13 @@ function getOS() {
 }
 
 function initVideoModal() {
-  var videoModalObject = $('[data-video-modal]');
+  const videoModalObject = $('[data-video-modal]');
 
   if (videoModalObject.length) {
     // there is a video modal in the DOM, load the YouTube API
-    var tag = document.createElement('script');
+    const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = function () {
@@ -110,7 +110,7 @@ function initVideoModal() {
 
   videoModalObject.on('shown.bs.modal', function (event) {
     if (window.videoPlayer) {
-      var videoId = event.relatedTarget.dataset.video;
+      const videoId = event.relatedTarget.dataset.video;
       window.videoPlayer.loadVideoById(videoId);
       window.videoPlayer.playVideo();
     }
@@ -124,9 +124,9 @@ function initVideoModal() {
 }
 
 function initCarousel() {
-  var CAROUSEL_SELECTOR = '.carousel';
-  var CAROUSEL_ITEM_SELECTOR = '.carousel-item';
-  var carousel = $(CAROUSEL_SELECTOR);
+  const CAROUSEL_SELECTOR = '.carousel';
+  const CAROUSEL_ITEM_SELECTOR = '.carousel-item';
+  const carousel = $(CAROUSEL_SELECTOR);
 
   carousel.on('slide.bs.carousel', function (e) {
     carousel.find(CAROUSEL_ITEM_SELECTOR).eq(e.from).addClass('transition-out');
@@ -137,12 +137,12 @@ function initCarousel() {
 }
 
 function initSnackbar() {
-  var SNACKBAR_SELECTOR = '.snackbar';
-  var SNACKBAR_ACTION_SELECTOR = '.snackbar__action';
-  var snackbars = $(SNACKBAR_SELECTOR);
+  const SNACKBAR_SELECTOR = '.snackbar';
+  const SNACKBAR_ACTION_SELECTOR = '.snackbar__action';
+  const snackbars = $(SNACKBAR_SELECTOR);
 
   snackbars.each(function () {
-    var snackbar = $(this);
+    const snackbar = $(this);
     snackbar.find(SNACKBAR_ACTION_SELECTOR).click(function () {
       snackbar.fadeOut();
     });
@@ -150,12 +150,12 @@ function initSnackbar() {
 }
 
 function setupClipboardJS() {
-  var clipboard = new ClipboardJS('.code-excerpt__copy-btn', {
+  const clipboard = new ClipboardJS('.code-excerpt__copy-btn', {
     text: function (trigger) {
-      var targetId = trigger.getAttribute('data-clipboard-target');
-      var target = document.querySelector(targetId);
-      var terminalRegExp = /^(\$\s*)|(C:\\(.*)>\s*)/gm;
-      var copy = target.textContent.replace(terminalRegExp, '');
+      const targetId = trigger.getAttribute('data-clipboard-target');
+      const target = document.querySelector(targetId);
+      const terminalRegExp = /^(\$\s*)|(C:\\(.*)>\s*)/gm;
+      const copy = target.textContent.replace(terminalRegExp, '');
       return copy;
     }
   });
