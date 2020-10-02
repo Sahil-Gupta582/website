@@ -1,38 +1,40 @@
 // TODO(chalin): package archive.js as its own top-level js so that it can be loaded independently
 
 // Number of releases to show by default (rest will be behind a "show all" link).
-var releasesToShow = 99999;
+const releasesToShow = 99999;
 
 // Fetches Flutter release JSON for the given OS and calls the callback once the data is available.
-var fetchFlutterReleases = function (os, callback, errorCallback) {
+const fetchFlutterReleases = function (os, callback, errorCallback) {
   // OS: windows, macos, linux
-  var url = "https://storage.googleapis.com/flutter_infra/releases/releases_" + os + ".json";
+  const url = "https://storage.googleapis.com/flutter_infra/releases/releases_" + os + ".json";
   $.ajax({
     type: "GET",
     url: url,
     dataType: "json",
-    success: function (data) { callback(data, os); },
+    success: function (data) {
+      callback(data, os);
+    },
     error: function (xhr, textStatus, errorThrown) {
       if (errorCallback) errorCallback(os);
     }
   })
-}
+};
 
 function updateTable(releases, os) {
-  var releaseData = releases.releases;
+  const releaseData = releases.releases;
 
-  for (var channel in releases.current_release) {
-    var table = $("#downloads-" + os + "-" + channel);
+  for (const channel in releases.current_release) {
+    const table = $("#downloads-" + os + "-" + channel);
     table.addClass("collapsed").find(".loading").remove();
 
-    var releasesForChannel = releaseData.filter(function (release) {
+    const releasesForChannel = releaseData.filter(function (release) {
       return release.channel == channel;
     });
 
     releasesForChannel.forEach(function (release, index) {
       // If this is the first row after the cut-off, insert the "Show more..." link.
       if (index === releasesToShow) {
-        var showAll = $("<a />").text("Show all...").attr("href", "#").click(function (event) {
+        const showAll = $("<a />").text("Show all...").attr("href", "#").click(function (event) {
           $(this).closest("table").removeClass("collapsed");
           $(this).closest("tr").remove();
           event.preventDefault();
@@ -40,12 +42,12 @@ function updateTable(releases, os) {
         $("<tr>").append($("<td colspan=\"3\"></td></tr>").append(showAll)).appendTo(table);
       }
 
-      var className = index >= releasesToShow ? "overflow" : "";
-      var url = releases.base_url + "/" + release.archive;
-      var row = $("<tr />").addClass(className).appendTo(table);
-      var hashLabel = $("<span />").text(release.hash.substr(0, 7)).addClass("git-hash");
-      var downloadLink = $("<a />").attr("href", url).text(release.version);
-      var date = new Date(Date.parse(release.release_date));
+      const className = index >= releasesToShow ? "overflow" : "";
+      const url = releases.base_url + "/" + release.archive;
+      const row = $("<tr />").addClass(className).appendTo(table);
+      const hashLabel = $("<span />").text(release.hash.substr(0, 7)).addClass("git-hash");
+      const downloadLink = $("<a />").attr("href", url).text(release.version);
+      const date = new Date(Date.parse(release.release_date));
       $("<td />").append(downloadLink).appendTo(row);
       $("<td />").append(hashLabel).appendTo(row);
       $("<td />").addClass("date").text(date.toLocaleDateString()).appendTo(row);
@@ -54,22 +56,22 @@ function updateTable(releases, os) {
 }
 
 function updateTableFailed(os) {
-  var tab = $("#tab-os-" + os);
+  const tab = $("#tab-os-" + os);
   tab.find(".loading").text("Failed to load releases. Refresh page to try again.");
 }
 
 function updateDownloadLink(releases, os) {
-  var channel = "stable";
-  var releasesForChannel = releases.releases.filter(function (release) {
+  const channel = "stable";
+  const releasesForChannel = releases.releases.filter(function (release) {
     return release.channel == channel;
   });
   if (!releasesForChannel.length)
     return;
 
-  var release = releasesForChannel[0];
-  var linkSegments = release.archive.split("/");
-  var archiveFilename = linkSegments[linkSegments.length - 1]; // Just the filename part of url
-  var downloadLink = $(".download-latest-link-" + os);
+  const release = releasesForChannel[0];
+  const linkSegments = release.archive.split("/");
+  const archiveFilename = linkSegments[linkSegments.length - 1]; // Just the filename part of url
+  const downloadLink = $(".download-latest-link-" + os);
   downloadLink
     .text(archiveFilename)
     .attr("href", releases.base_url + "/" + release.archive);
@@ -79,13 +81,13 @@ function updateDownloadLink(releases, os) {
   $(".download-latest-link-filename").text(archiveFilename);
 
   // Update inlined filenames in <code> element text nodes:
-  var fileNamePrefix = 'flutter_';
-  var code = $('code:contains("' + fileNamePrefix + '")');
-  var textNode = $(code).contents().filter(function() {
+  const fileNamePrefix = 'flutter_';
+  const code = $('code:contains("' + fileNamePrefix + '")');
+  const textNode = $(code).contents().filter(function () {
     return this.nodeType == 3 && this.textContent.includes(fileNamePrefix);
   });
-  var text = $(textNode).text();
-  var newText = text.replace(new RegExp('^(.*?)\\b' + fileNamePrefix + '\\w+_v.*'), '$1' + archiveFilename);
+  const text = $(textNode).text();
+  const newText = text.replace(new RegExp('^(.*?)\\b' + fileNamePrefix + '\\w+_v.*'), '$1' + archiveFilename);
   $(textNode).replaceWith(newText);
 }
 

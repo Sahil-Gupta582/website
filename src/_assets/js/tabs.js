@@ -1,10 +1,10 @@
 function setupTabs(container, storageName, defaultTab) {
-  var tabs = $('li a', container);
+  const tabs = $('li a', container);
   // console.log('>> #tabs', tabs.length, storageName);
 
   // Return 'foo' from either '#foo' or '?tab=foo'
   function getTabIdFromQuery(query) {
-    var match = query.match(/(#|\btab=)([\w-]+)/);
+    const match = query.match(/(#|\btab=)([\w-]+)/);
     return match ? match[2] : '';
   }
 
@@ -13,7 +13,7 @@ function setupTabs(container, storageName, defaultTab) {
     e.preventDefault();
     $(this).tab('show');
 
-    var id = getTabIdFromQuery($(this).attr('href'));
+    const id = getTabIdFromQuery($(this).attr('href'));
 
     // Persist to local storage so we can pre-select around the site
     if (storageName && window.localStorage) {
@@ -21,9 +21,9 @@ function setupTabs(container, storageName, defaultTab) {
       window.localStorage.setItem(storageName, id);
     }
 
-    var l = location, query = '?tab=' + id;
+    const l = location, query = '?tab=' + id;
     if (id && l.search != query) {
-      var url = l.protocol + '//' + l.host + l.pathname + query + l.hash;
+      const url = l.protocol + '//' + l.host + l.pathname + query + l.hash;
       // console.log('>> history.replaceState of', url);
       history.replaceState(undefined, undefined, url);
     } else {
@@ -32,14 +32,14 @@ function setupTabs(container, storageName, defaultTab) {
   }
 
   function selectTab(id) {
-    var tab = tabs.filter('[href="#' + id + '"]');
+    const tab = tabs.filter('[href="#' + id + '"]');
     // console.log('>> selectedTab:', id, tab);
     tab.click();
   }
 
   tabs.click(clickHandler);
 
-  var selectedTab;
+  let selectedTab;
   if (selectedTab = getTabIdFromQuery(location.search)) {
     // console.log('>> setting tab from location:', selectedTab)
     selectTab(selectedTab);
@@ -57,8 +57,8 @@ function setupTabs(container, storageName, defaultTab) {
 
 // TODO(chalin): Temporary until we convert all tabs to BS tabs
 function setupToolsTabs(container, tabIdPrefix, storageName, defaultTab) {
-  var tabs = $('.tabs__top-bar li', container);
-  var tabContents = $('.tabs__content', container);
+  const tabs = $('.tabs__top-bar li', container);
+  const tabContents = $('.tabs__content', container);
 
   function clearTabsCurrent() {
     tabs.removeClass('current');
@@ -68,14 +68,14 @@ function setupToolsTabs(container, tabIdPrefix, storageName, defaultTab) {
   // Searches for the tab for a tool by its ID and selects it
   // (used to pre-select a tool from url fragement/localStorage)
   function selectTool(id) {
-    var escapedId = $.escapeSelector(id);
-    var tab = tabs.filter("[data-tab='" + tabIdPrefix + id + "']");
+    const escapedId = $.escapeSelector(id);
+    const tab = tabs.filter("[data-tab='" + tabIdPrefix + id + "']");
     tab.click();
   }
 
   tabs.click(function () {
-    var tab_id = $(this).attr('data-tab');
-    var tab_href = $(this).attr('data-tab-href');
+    const tab_id = $(this).attr('data-tab');
+    const tab_href = $(this).attr('data-tab-href');
 
     if (tab_href) {
       location.href = tab_href;
